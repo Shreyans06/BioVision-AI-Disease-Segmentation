@@ -5,8 +5,7 @@ import numpy as np
 
 
 class ChestXDetDataset(BaseDataset):
-    """CamVid Dataset. Read images, apply augmentation and preprocessing transformations.
-    
+    """
     Args:
         images_dir (str): path to images folder
         masks_dir (str): path to segmentation masks folder
@@ -18,14 +17,14 @@ class ChestXDetDataset(BaseDataset):
     
     """
     
-    CLASSES = ['no finding', 'atelectasis', 'calcification', 'cardiomegaly', 'consolidation', 'diffuse nodule', 'effusion', 'emphysema', 'fibrosis', 'fracture', 'mass', 'nodule', 'pleural thickening', 'pneumothorax']
+    CLASSES = ['background' , 'atelectasis', 'calcification', 'cardiomegaly', 'consolidation', 'diffuse nodule', 'effusion', 'emphysema', 'fibrosis', 'fracture', 'mass', 'nodule', 'pleural thickening', 'pneumothorax']
 
     
     def __init__(
             self, 
             images_dir, 
             masks_dir,
-            dim=(224, 224, 3), 
+            dim = (1024, 1024), 
             classes=None, 
             augmentation=None, 
             preprocessing=None,
@@ -42,23 +41,23 @@ class ChestXDetDataset(BaseDataset):
         self.preprocessing = preprocessing
     
     def __getitem__(self, i):
+
         input_rows = self.dim[0]
         input_cols = self.dim[1]
+        print(self.images_fps[i])
 
         # read data
         image = cv2.imread(self.images_fps[i])
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        mask = cv2.imread(self.masks_fps[i], cv2.IMREAD_GRAYSCALE)
+        mask = cv2.imread(self.masks_fps[i], 0)
 
-        image = cv2.resize(image, (input_rows, input_cols), interpolation=cv2.INTER_NEAREST)
-        mask = cv2.resize(mask, (input_rows, input_cols), interpolation=cv2.INTER_NEAREST)
+        if input_rows != 1024 and input_cols != 1024: 
+            image = cv2.resize(image, (input_rows, input_cols), interpolation=cv2.INTER_NEAREST)
+            mask = cv2.resize(mask, (input_rows, input_cols), interpolation=cv2.INTER_NEAREST)
         
-        # print(self.ids[i])
-        # extract certain classes from mask (e.g. cars)
-        # plt.imsave(f"abb.png" , mask , cmap ='gray')
-
-        masks = [(mask == v) for v in self.class_values]
-        mask = np.stack(masks, axis=-1)
+        # Extract classes from the mask
+        # masks = [(mask == v) for v in self.class_values]
+        mask = np.stack([mask , mask , mask], axis=-1).astype('float')
         # print(mask.shape)
         
         # apply augmentations

@@ -14,7 +14,7 @@ img_dir = f"{mode}_data/{mode}"
 dataset_json = open(f"ChestX_Det_{mode}.json")
 dataset = json.load(dataset_json)
 
-categories = {'No finding' : 0 , 'Atelectasis' : 1, 'Calcification'  : 2, 
+categories = {'Background' : 0 , 'Atelectasis' : 1, 'Calcification'  : 2, 
               'Cardiomegaly': 3, 'Consolidation': 4, 
               'Diffuse Nodule' : 5, 'Effusion' : 6, 
               'Emphysema' : 7, 'Fibrosis' : 8, 
@@ -92,7 +92,7 @@ def create_coco_data(img_dir , dataset_json):
         ],
         "annotations": annotations,  # Add the list of annotations to the JSON object
         "categories": [
-                    { "supercategory": "No disease" , "id" : 0 , "name" : "No finding"},
+                    { "supercategory": "No disease" , "id" : 0 , "name" : "Background"},
                     {"supercategory": "disease" , "id" : 1 , "name" : "Atelectasis"}, 
                     {"supercategory": "disease" , "id" : 2 , "name" : "Calcification"}, 
                     {"supercategory": "disease" , "id" : 3 , "name" : "Cardiomegaly"},
