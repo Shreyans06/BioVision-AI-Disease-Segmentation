@@ -1,4 +1,4 @@
-### ChestXDet Disease Segmentation
+### BioVision: AI Disease Segmentation
 
 This project focuses on the semantic segmentation of diseases from chest X-rays using the ChestX-Det dataset. The goal is to accurately localize diseases within the lungs for improved diagnosis and treatment planning
 
